@@ -1,0 +1,15 @@
+{
+  "name": "shop-with-0x",
+  "version": "1.0.0",
+  "description": "this is an e commece backend api feel free to use it in your projects but dont forget to credit me as well",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "passport": "^0.7.0"
+  }
+}

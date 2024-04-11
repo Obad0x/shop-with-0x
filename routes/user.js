@@ -3,6 +3,11 @@ const Router = express.Router();
 const User = require('../models/USER');
 const bcrypt = require('bcrypt');
 const Salt = 10
+const jwt = require('jsonwebtoken');
+const auth = require('../config/checkAuth');
+const expiresindays = 3
+const expiresinseconds = expiresindays * 60 * 60 * 24 
+
 
 
 
@@ -20,11 +25,11 @@ Router.post('/signup', async (req, res) => {
             });
         }
 
-        bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.genSalt(Salt, (err, Salt) => {
             if (err) {
                 return res.status(500).json({ message: err.message });
             }
-            bcrypt.hash(password, salt, async (err, hash) => {
+            bcrypt.hash(password, Salt, async (err, hash) => {
                 if (err) {
                     return res.status(500).json({ message: err.message });
                 }
@@ -56,12 +61,18 @@ Router.post('/login', async (req, res) => {
                 status: "fail"
             });
         }
+        
         bcrypt.compare(password, user.password, (err, result) => {
             if (err) {
                 return res.status(500).json({ message: err.message });
             }
             if (result) {
-                res.status(200).json({ message: "User logged in successfully", status: "success" });
+                const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+                    expiresIn: expiresinseconds
+                });
+                req.headers.authorization = token
+                res.cookie('token', token, { httpOnly: true });
+                res.status(200).json({ message: "User logged in successfully", status: "success" , token : token });
             } else {
                 return res.status(401).json({
                     message: "Incorrect password",
@@ -73,8 +84,6 @@ Router.post('/login', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-    
-
-
+});
 
 module.exports = Router;

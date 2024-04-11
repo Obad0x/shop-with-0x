@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const users = require('./routes/user');
+const products = require('./routes/product');
 const cors = require('cors');
 const methodoverride = require('method-override');
 const cookieParser = require('cookie-parser');
@@ -38,6 +39,7 @@ app.get('/', (req, res)=>{
     console.log('hello world')
 })
 app.use ('/api/users', users);
+app.use('/api/products', products);
 
 app.listen(3000, ()=>{
     console.log('server is running on port 3000')

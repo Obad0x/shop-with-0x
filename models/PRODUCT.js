@@ -17,7 +17,7 @@ const productSchema = new Schema({
    },
    Category :{
     type : String ,
-    enum : ["Tech" , "Fashion", " HEALTH"]
+    enum : ["Tech" , "Fashion", "Health"]
    },
    image : {
     type : String,

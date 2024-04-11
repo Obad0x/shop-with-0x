@@ -86,4 +86,16 @@ Router.post('/login', async (req, res) => {
     }
 });
 
+// access profile
+Router.get('/profile' , auth , async  (req, res) => {
+    try {
+        const profile = await User.find({_id : req.user.id}).select('-password')
+       res.json(profile);
+
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+})
+
 module.exports = Router;

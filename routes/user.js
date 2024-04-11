@@ -98,4 +98,22 @@ Router.get('/profile' , auth , async  (req, res) => {
     }
 })
 
+
+Router.patch('/profile', auth, async (req, res) => {
+    try {
+        console.log(req.body)
+        const profile = await User.findOneAndUpdate({_id : req.user.id}, req.body, {new: true})
+        res.json(profile);
+
+
+
+    } 
+    
+    
+    catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+
+})
+
 module.exports = Router;

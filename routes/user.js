@@ -30,7 +30,7 @@ Router.post('/signup', async (req, res) => {
                 }
                 const newUser = new User({
                     username: username,
-                    password: hash // Store the hashed password, not the plain password
+                    password: hash 
                 });
                 try {
                     await newUser.save();
@@ -45,6 +45,35 @@ Router.post('/signup', async (req, res) => {
     }
 });
 
+
+Router.post('/login', async (req, res) => {
+    try {
+        const { username, password } = req.body;
+        const user = await User.findOne({ username: username });
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found",
+                status: "fail"
+            });
+        }
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: err.message });
+            }
+            if (result) {
+                res.status(200).json({ message: "User logged in successfully", status: "success" });
+            } else {
+                return res.status(401).json({
+                    message: "Incorrect password",
+                    status: "fail"
+                });
+            }
+        });
+        
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+    
 
 
 

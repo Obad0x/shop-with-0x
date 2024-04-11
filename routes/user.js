@@ -90,11 +90,15 @@ Router.post('/login', async (req, res) => {
 Router.get('/profile' , auth , async  (req, res) => {
     try {
         const profile = await User.find({_id : req.user.id}).select('-password')
-       res.json(profile);
+       res.json({
+        user : profile,
+        message: "User profile fetched successfully",
+        status: "success"
+       });
 
 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: " Internal Server " , status : " fail " , err : err.message  });
     }
 })
 
@@ -103,7 +107,12 @@ Router.patch('/profile', auth, async (req, res) => {
     try {
         console.log(req.body)
         const profile = await User.findOneAndUpdate({_id : req.user.id}, req.body, {new: true})
-        res.json(profile);
+        res.json({
+            user : profile,
+            message: "User updated successfully",
+            status: "success"
+
+        });
 
 
 

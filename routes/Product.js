@@ -6,22 +6,40 @@ const Products = require('../models/PRODUCT');
 
 
 router.get('/', (req, res) => {
-    console.log('featured ')})
+   
 
     router.get('/products', async (req, res) => {
-        const products = await  Products.find();
-        res.status(200).json({message : "success", products: products});
-    })
+        try{
+            const products = await  Products.find();
+            res.status(200).json({message : "success", products: products});
+        }catch(err){
+            return res.status(500).json({message : "error", err : err.message});
+        }
 
+      
+    })
+})
 
     router.get('/products/:category', async (req,res) => {
-        const products = await  Products.find({category: req.params.category});
-        res.status(200).json({message : "success", products: products});
+        try{
+            const products = await  Products.find({category: req.params.category});
+            res.status(200).json({message : "success", products: products});
+        }catch(error)
+        {
+            return res.status(500).json({message : "error", err : error.message});
+        }
+        
     })
 
     router.get('/products/:id', async (req,res) => {
-        const product = await  Products.findById(req.params.id);
-        res.status(200).json({message : "success", product: product});
+        try{
+
+            const product = await  Products.findById(req.params.id);
+            res.status(200).json({message : "success", product: product});
+        }catch(err){
+            return res.status(500).json({message : "error", err : err.message});
+        }
+       
     })
 
    
@@ -61,6 +79,7 @@ router.get('/', (req, res) => {
 
             }catch(err){
                 console.log(err);
+                return res.status(500).json({message : "error", err: err});
             }
             
         })
